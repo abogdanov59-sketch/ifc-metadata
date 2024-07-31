@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
+        <RootNamespace>ifc_metadata</RootNamespace>
+        <Title>ifc_metadata</Title>
+        <Authors>Bingosoft</Authors>
+        <Copyright>Bingosoft</Copyright>
+        <Platforms>x64</Platforms>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>$(AssemblyVersion)</FileVersion>
+        <Version>$(AssemblyVersion)</Version>
+        <ServerGarbageCollection>false</ServerGarbageCollection>
+        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|x64'">
+      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|x64'">
+      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|x64'">
+      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|x64'">
+      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Xbim.Essentials" Version="6.0.445" />
+    </ItemGroup>
+
+</Project>
