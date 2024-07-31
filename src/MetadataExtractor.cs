@@ -12,6 +12,8 @@ using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MaterialResource;
 
+#pragma warning disable RCS1213, IDE0051, S1144
+
 namespace Bingosoft.Net.IfcMetadata
 {
     internal sealed class MetadataExtractor

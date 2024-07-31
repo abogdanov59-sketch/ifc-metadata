@@ -25,7 +25,7 @@ namespace Bingosoft.Net.IfcMetadata
         ///   The IFC type of the building element, e.g. 'IfcStandardWallCase'
         /// </summary>
         [JsonProperty("type")]
-        public string @Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         ///   The GlobalId of the parent element if any.

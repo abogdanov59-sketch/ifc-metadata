@@ -24,21 +24,7 @@ namespace Bingosoft.Net.IfcMetadata
                 Environment.Exit(1);
             }
 
-            FileInfo jsonTargetFile;
-            if (args.Length < 2)
-            {
-                jsonTargetFile = new FileInfo(Path.ChangeExtension(args[0], ".json"));
-            }
-            else
-            {
-                jsonTargetFile = new FileInfo(args[2]);
-                if (!jsonTargetFile.Exists)
-                {
-                    Console.WriteLine($"File: {jsonTargetFile} does not exist.");
-                    Environment.Exit(1);
-                }
-            }
-
+            var jsonTargetFile = args.Length < 2 ? new FileInfo(Path.ChangeExtension(args[0], ".json")) : new FileInfo(args[1]);
             try
             {
                 var extractor = MetadataExtractor.FromIfc(ifcSourceFile);

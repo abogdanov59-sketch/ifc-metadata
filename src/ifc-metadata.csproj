@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
         <RootNamespace>ifc_metadata</RootNamespace>
         <Title>ifc_metadata</Title>
         <Authors>Bingosoft</Authors>
@@ -17,19 +17,11 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|x64'">
-      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|x64'">
       <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|x64'">
-      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
       <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
     </PropertyGroup>
 
