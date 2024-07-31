@@ -8,7 +8,7 @@
         <Authors>Bingosoft</Authors>
         <Copyright>Bingosoft</Copyright>
         <Platforms>x64</Platforms>
-        <AssemblyVersion>0.0.8.1</AssemblyVersion>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <Version>$(AssemblyVersion)</Version>
         <ServerGarbageCollection>false</ServerGarbageCollection>
@@ -34,7 +34,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Xbim.Essentials" Version="6.0.445" />
     </ItemGroup>
 

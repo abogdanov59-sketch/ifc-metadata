@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
@@ -18,40 +18,54 @@ namespace Bingosoft.Net.IfcMetadata
 {
     internal sealed class MetadataExtractor
     {
+        private static readonly JsonSerializerOptions Jso = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+
         /// <summary>
         ///   The Id field is populated with the name of the project.
         /// </summary>
-        public string id;
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
 
         /// <summary>
         ///   The GlobalId of the project.
         /// </summary>
-        public string projectId;
+        [JsonPropertyName("projectId")]
+        public string ProjectId { get; set; }
 
         /// <summary>
         ///   The author of the project.
         /// </summary>
-        public string author;
+        [JsonPropertyName("author")]
+        public string Author { get; set; }
 
         /// <summary>
         ///   The creation date of the project.
         /// </summary>
-        public string createdAt;
+        [JsonPropertyName("createdAt")]
+        public string CreatedAt { get; set; }
 
         /// <summary>
         ///   The schema of the ifc model.
         /// </summary>
-        public string schema;
+        [JsonPropertyName("schema")]
+        public string Schema { get; set; }
 
         /// <summary>
         ///   The application with which the model was created.
         /// </summary>
-        public string creatingApplication;
+        [JsonPropertyName("creatingApplication")]
+        public string CreatingApplication { get; set; }
 
         /// <summary>
         ///   A list of all building elements as MetaObjects within the project.
         /// </summary>
-        public List<Metadata> metaObjects;
+        [JsonPropertyName("metaObjects")]
+        public List<Metadata> MetaObjects { get; set; }
 
         /// <summary>
         ///   The convenience initialiser creates and returns an instance of the
@@ -74,19 +88,19 @@ namespace Bingosoft.Net.IfcMetadata
                             header.TimeStamp,
                             header.SchemaVersion,
                             header.CreatingApplication);
-                extractor.metaObjects = ExtractHierarchy(project);
+                extractor.MetaObjects = ExtractHierarchy(project);
                 return extractor;
             }
         }
 
         private void Init(string id, string projectId, string author, string createdAt, string schema, string creatingApplication)
         {
-            this.id = id;
-            this.projectId = projectId;
-            this.author = author;
-            this.createdAt = createdAt;
-            this.schema = schema;
-            this.creatingApplication = creatingApplication;
+            Id = id;
+            ProjectId = projectId;
+            Author = author;
+            CreatedAt = createdAt;
+            Schema = schema;
+            CreatingApplication = creatingApplication;
         }
 
         private static string GetAuthor(IList<string> authors)
@@ -320,18 +334,7 @@ namespace Bingosoft.Net.IfcMetadata
 
         internal string Serialize()
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
-
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = contractResolver,
-                Formatting = Formatting.Indented
-            };
-
-            return JsonConvert.SerializeObject(this, settings);
+            return JsonSerializer.Serialize(this, Jso);
         }
     }
 }

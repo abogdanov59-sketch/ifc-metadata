@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Bingosoft.Net.IfcMetadata
 {
@@ -12,34 +12,34 @@ namespace Bingosoft.Net.IfcMetadata
         /// <summary>
         ///   The GlobalId of the building element
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         ///   The Name of the building element
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         ///   The IFC type of the building element, e.g. 'IfcStandardWallCase'
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
         /// <summary>
         ///   The GlobalId of the parent element if any.
         /// </summary>
-        [JsonProperty("parent")]
+        [JsonPropertyName("parent")]
         public string Parent { get; set; }
 
-        [JsonProperty("properties")]
+        [JsonPropertyName("properties")]
         public string[] PropertyIds { get; set; }
 
-        [JsonProperty("material_id")]
+        [JsonPropertyName("material_id")]
         public string Material { get; set; }
 
-        [JsonProperty("type_id")]
+        [JsonPropertyName("type_id")]
         public string TypeId { get; set; }
     }
 }
