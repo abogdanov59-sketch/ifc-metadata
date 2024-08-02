@@ -8,7 +8,7 @@
         <Authors>Bingosoft</Authors>
         <Copyright>Bingosoft</Copyright>
         <Platforms>x64</Platforms>
-        <AssemblyVersion>0.0.2</AssemblyVersion>
+        <AssemblyVersion>0.0.4</AssemblyVersion>
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <Version>$(AssemblyVersion)</Version>
         <ServerGarbageCollection>false</ServerGarbageCollection>
@@ -21,15 +21,7 @@
       <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|x64'">
-      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|x64'">
-      <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|x64'">
       <NoWarn>1701;1702;IDE0063;IDE0079</NoWarn>
     </PropertyGroup>
 

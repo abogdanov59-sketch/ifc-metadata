@@ -87,6 +87,7 @@ namespace Bingosoft.Net.IfcMetadata
                             header.TimeStamp,
                             header.SchemaVersion,
                             header.CreatingApplication);
+
                 extractor.MetaObjects = ExtractHierarchy(project);
                 return extractor;
             }
@@ -131,10 +132,13 @@ namespace Bingosoft.Net.IfcMetadata
                 TypeId = GetTypedId(objectDefinition)
             };
 
-            var parentProps = GetProperties((IIfcProduct)objectDefinition);
-            if (parentProps.Length > 0)
+            if (objectDefinition is not IIfcProject)
             {
-                parentObject.PropertyIds = parentProps;
+                var parentProps = GetProperties((IIfcObject)objectDefinition);
+                if (parentProps.Length > 0)
+                {
+                    parentObject.PropertyIds = parentProps;
+                }
             }
 
             parentObject.Material = GetMaterialsV2(objectDefinition);
@@ -293,7 +297,7 @@ namespace Bingosoft.Net.IfcMetadata
             }
         }
 
-        private static string[] GetProperties(IIfcProduct product)
+        private static string[] GetProperties(IIfcObject product)
         {
             return product.IsDefinedBy
                           .SelectMany(r => r.RelatingPropertyDefinition.PropertySetDefinitions)
