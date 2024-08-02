@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -132,7 +131,7 @@ namespace Bingosoft.Net.IfcMetadata
                 TypeId = GetTypedId(objectDefinition)
             };
 
-            var parentProps = GetProperties(objectDefinition, objectType);
+            var parentProps = GetProperties((IIfcProduct)objectDefinition);
             if (parentProps.Length > 0)
             {
                 parentObject.PropertyIds = parentProps;
@@ -157,7 +156,7 @@ namespace Bingosoft.Net.IfcMetadata
                         TypeId = typeId
                     };
 
-                    var props = GetProperties(element, element.GetType());
+                    var props = GetProperties(element);
                     if (props.Length > 0)
                     {
                         mo.PropertyIds = props;
@@ -219,62 +218,57 @@ namespace Bingosoft.Net.IfcMetadata
         private static string[] GetMaterials(IIfcObjectDefinition objectDefinition)
         {
             var material = objectDefinition.GetType().GetProperty("Material");
+            if (material == null) return Array.Empty<string>();
 
-            if (material != null)
+            var materialsv = material.GetValue(objectDefinition);
+            if (materialsv == null) return Array.Empty<string>();
+
+            var materials = materialsv.GetType().GetProperty("Materials");
+            if (materials != null)
             {
-                var materialsv = material.GetValue(objectDefinition);
-                if (materialsv != null)
+                var maters = materials.GetValue(materialsv);
+                switch (maters)
                 {
-                    var materials = materialsv.GetType().GetProperty("Materials");
-                    if (materials != null)
+                    case Xbim.Ifc4.ItemSet<IfcMaterial> mat1:
                     {
-                        var maters = materials.GetValue(materialsv);
-                        switch (maters)
+                        List<string> materoalList = new List<string>(mat1.Count);
+                        foreach (var item in mat1)
                         {
-                            case Xbim.Ifc4.ItemSet<IfcMaterial> mat1:
-                            {
-                                List<string> materoalList = new List<string>(mat1.Count);
-                                foreach (var item in mat1)
-                                {
-                                    materoalList.Add($"IfcMaterial_{item.EntityLabel}");
-                                }
-
-                                return materoalList.ToArray();
-                            }
-                            case Xbim.Ifc2x3.ItemSet<Xbim.Ifc2x3.MaterialResource.IfcMaterial> mat2:
-                            {
-                                List<string> materoalList = new List<string>(mat2.Count);
-                                foreach (var item in mat2)
-                                {
-                                    materoalList.Add($"IfcMaterial_{item.EntityLabel}");
-                                }
-
-                                return materoalList.ToArray();
-                            }
-                            default:
-                                return Array.Empty<string>();
+                            materoalList.Add($"IfcMaterial_{item.EntityLabel}");
                         }
+
+                        return materoalList.ToArray();
                     }
-                    else
+                    case Xbim.Ifc2x3.ItemSet<Xbim.Ifc2x3.MaterialResource.IfcMaterial> mat2:
                     {
-                        switch (materialsv)
+                        List<string> materoalList = new List<string>(mat2.Count);
+                        foreach (var item in mat2)
                         {
-                            case IfcMaterial material4:
-                            {
-                                return new[] { $"IfcMaterial_{material4.EntityLabel}" };
-                            }
-                            case Xbim.Ifc2x3.MaterialResource.IfcMaterial material2x3:
-                            {
-                                return new[] { $"IfcMaterial_{material2x3.EntityLabel}" };
-                            }
-                            default:
-                                return Array.Empty<string>();
+                            materoalList.Add($"IfcMaterial_{item.EntityLabel}");
                         }
+
+                        return materoalList.ToArray();
                     }
+                    default:
+                        return Array.Empty<string>();
                 }
             }
-
-            return Array.Empty<string>();
+            else
+            {
+                switch (materialsv)
+                {
+                    case IfcMaterial material4:
+                    {
+                        return new[] { $"IfcMaterial_{material4.EntityLabel}" };
+                    }
+                    case Xbim.Ifc2x3.MaterialResource.IfcMaterial material2x3:
+                    {
+                        return new[] { $"IfcMaterial_{material2x3.EntityLabel}" };
+                    }
+                    default:
+                        return Array.Empty<string>();
+                }
+            }
         }
 
         private static string GetMaterialsV2(IIfcObjectDefinition objectDefinition)
@@ -289,39 +283,22 @@ namespace Bingosoft.Net.IfcMetadata
             return entLabel is null ? null : $"{objectDefinition.Material.ExpressType.Name}_{entLabel}";
         }
 
-        private static string[] GetProperties(IIfcObjectDefinition objectDefinition, Type objectType)
-        {
-            var prop = objectType.GetProperty("PropertySets");
-            var value = prop.GetValue(objectDefinition);
-            if (value != null)
-            {
-                var enumerableMethod = typeof(Enumerable).GetMethod("Cast").MakeGenericMethod(prop.PropertyType.GetGenericArguments()[0]);
-                var castedValue = enumerableMethod.Invoke(null, new[] { value }) as IEnumerable;
-                List<string> ids = new List<string>(10);
-                foreach (var item in castedValue)
-                {
-                    var value2 = item.GetType().GetProperty("GlobalId").GetValue(item);
-                    ids.Add(value2.ToString());
-                }
-
-                if (ids.Count > 0)
-                {
-                    return ids.ToArray();
-                }
-            }
-
-            return Array.Empty<string>();
-        }
-
         private static void ExtractRelatedObjects(IIfcObjectDefinition objectDefinition, ref List<Metadata> metaObjects, string parentObjId)
         {
-
             var relatedObjects = objectDefinition.IsDecomposedBy.SelectMany(r => r.RelatedObjects);
             foreach (var item in relatedObjects)
             {
                 var children = ExtractHierarchy(item, parentObjId);
                 metaObjects.AddRange(children);
             }
+        }
+
+        private static string[] GetProperties(IIfcProduct product)
+        {
+            return product.IsDefinedBy
+                          .SelectMany(r => r.RelatingPropertyDefinition.PropertySetDefinitions)
+                          .OfType<IIfcPropertySet>()
+                          .Select(pset => pset.GlobalId.Value.ToString()).ToArray();
         }
 
         internal void ToJson(FileInfo jsonTargetFile)
