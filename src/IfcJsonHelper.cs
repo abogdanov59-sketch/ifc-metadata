@@ -22,18 +22,18 @@ namespace Bingosoft.Net.IfcMetadata
                 writer.WriteString("schema", metadata.Schema);
                 writer.WriteString("creatingApplication", metadata.CreatingApplication);
 
-                writer.WriteStartObject();
+                writer.WriteStartObject("metaObjects");
 
                 foreach (var item in metadata.MetaObjects)
                 {
-                    writer.WriteStartObject();
+                    writer.WriteStartObject(item.Id);
 
                     writer.WriteString("id", item.Id);
                     writer.WriteString("name", item.Name);
                     writer.WriteString("type", item.Type);
                     writer.WriteString("parent", item.Parent);
 
-                    if (item.PropertyIds.Length > 0)
+                    if (item.PropertyIds?.Length > 0)
                     {
                         writer.WriteStartArray("properties");
 
