@@ -17,13 +17,6 @@ namespace Bingosoft.Net.IfcMetadata
 {
     internal sealed class MetadataExtractor
     {
-        private static readonly JsonSerializerOptions Jso = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        };
-
         /// <summary>
         ///   The Id field is populated with the name of the project.
         /// </summary>
@@ -303,19 +296,6 @@ namespace Bingosoft.Net.IfcMetadata
                           .SelectMany(r => r.RelatingPropertyDefinition.PropertySetDefinitions)
                           .OfType<IIfcPropertySet>()
                           .Select(pset => pset.GlobalId.Value.ToString()).ToArray();
-        }
-
-        internal void ToJson(FileInfo jsonTargetFile)
-        {
-            using (var outputFile = new StreamWriter(jsonTargetFile.FullName))
-            {
-                outputFile.Write(Serialize());
-            }
-        }
-
-        internal string Serialize()
-        {
-            return JsonSerializer.Serialize(this, Jso);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Bingosoft.Net.IfcMetadata
             try
             {
                 var extractor = MetadataExtractor.FromIfc(ifcSourceFile);
-                extractor.ToJson(jsonTargetFile);
+                IfcJsonHelper.ToJson(jsonTargetFile, ref extractor);
                 Environment.Exit(0);
             }
             catch (Exception ex)
