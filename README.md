@@ -10,7 +10,7 @@ A command line tool used for transforming IFC into JSON format. The result is a 
   "schema": "IFC2X3",
   "creatingApplication": "23.0.20.21 - Exporter 23.1.0.0 - Alternate UI 23.1.0.0",
   "metaObjects": [
-    {
+    "3ir4vYruPFgwIKoil6nQwl": {
       "id": "3ir4vYruPFgwIKoil6nQwl",
       "name": "301-16-17-37",
       "type": "IfcProject",
@@ -19,7 +19,7 @@ A command line tool used for transforming IFC into JSON format. The result is a 
       "material_id": null,
       "type_id": null
     },
-    {
+    "3ir4vYruPFgwIKoiivFWhQ": {
       "id": "3ir4vYruPFgwIKoiivFWhQ",
       "name": "отм.-2.200",
       "type": "IfcBuildingStorey",
