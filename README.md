@@ -57,4 +57,39 @@ $ git clone https://github.com/bingo-soft/ifc-metadata && cd ifc-metadata/src \
 $ ifc-metadata source.ifc target.json
 ```
 
+## Native module port
+
+This repository now contains the scaffolding for the in-memory IFC → JSON conversion
+module described in the technical specification. The native implementation lives in
+[`native/`](native/) and is organised as a CMake project that builds the
+`ifcjsonconverter` shared library. The JNI bindings expose the converter to a Kotlin
+wrapper located in [`kotlin/`](kotlin/).
+
+### Building the native prototype
+
+```
+cmake -S native -B native/build
+cmake --build native/build
+ctest --test-dir native/build
+```
+
+> **Note:** The current implementation provides a functional skeleton with stub
+> integrations for IfcOpenShell and JSON serialisation. Replace the stub components
+> with calls into the chosen IFC toolkit before using the converter in production.
+
+### Kotlin wrapper
+
+The Gradle module in `kotlin/` publishes a thin wrapper that loads the native library
+and offers ergonomic helper functions for Kotlin/JVM projects. A minimal usage
+example mirrors the JNI contract:
+
+```kotlin
+IfcJsonConverter.initialize()
+val json = IfcJsonConverter.transformFileToString(Paths.get("model.ifc"))
+IfcJsonConverter.shutdown()
+```
+
+Native binaries must be made available on the library path (e.g., via
+`System.loadLibrary("ifcjsonconverter")`).
+
 

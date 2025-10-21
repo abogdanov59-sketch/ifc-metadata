@@ -2,3 +2,8 @@
 src/obj/
 src/bin/
 src/Properties/
+native/build/
+kotlin/.gradle/
+kotlin/build/
+*.iml
+*.class
