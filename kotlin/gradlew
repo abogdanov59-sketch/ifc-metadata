@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if command -v gradle >/dev/null 2>&1; then
+  exec gradle "$@"
+fi
+>&2 echo "Gradle is not installed. Install Gradle or use the Gradle wrapper distribution."
+exit 1
